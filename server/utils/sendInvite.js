@@ -18,7 +18,7 @@ async function sendInviteEmail(toEmail, groupName, inviterName) {
         <h2 style="color: #16a34a;">You've been invited!</h2>
         <p><strong>${inviterName}</strong> has invited you to join the group <strong>"${groupName}"</strong> on Splitwise Clone.</p>
         <p>Click the button below to create your account and join:</p>
-        <a href="http://localhost:5173/register" style="
+        <a href="${process.env.CLIENT_URL || 'https://splitwise-clone-sigma.vercel.app'}/register" style="
           display: inline-block;
           background-color: #16a34a;
           color: white;
