@@ -1,9 +1,16 @@
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
 async function sendInviteEmail(toEmail, groupName, inviterName) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  await resend.emails.send({
-    from: "Splitwise Clone <onboarding@resend.dev>",
+  const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    auth: {
+      user: process.env.BREVO_LOGIN,
+      pass: process.env.BREVO_PASSWORD,
+    },
+  });
+  await transporter.sendMail({
+    from: `"Splitwise Clone" <${process.env.EMAIL_USER}>`,
     to: toEmail,
     subject: `${inviterName} invited you to join "${groupName}"`,
     html: `
