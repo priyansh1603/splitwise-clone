@@ -43,8 +43,9 @@ router.post("/:id/members", auth, async (req, res) => {
       await PendingInvite.create({ email, group: group._id });
       try {
         await sendInviteEmail(email, group.name, group.createdBy.name);
+        console.log("Invite email sent to:", email);
       } catch (emailErr) {
-        console.error("Failed to send invite email:", emailErr.message);
+        console.error("EMAIL ERROR:", emailErr.message, emailErr.code);
       }
     }
     return res.status(200).json({ message: "User not registered. Invite email sent!" });
