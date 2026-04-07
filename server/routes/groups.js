@@ -39,16 +39,16 @@ router.post("/:id/members", auth, async (req, res) => {
 
   if (!user) {
     const alreadyInvited = await PendingInvite.findOne({ email, group: group._id });
+    let emailStatus = "sent";
     if (!alreadyInvited) {
       await PendingInvite.create({ email, group: group._id });
-      let emailStatus = "sent";
       try {
         await sendInviteEmail(email, group.name, group.createdBy.name);
       } catch (emailErr) {
         emailStatus = emailErr.message;
       }
-    return res.status(200).json({ message: "User not registered. Invite email sent!", emailStatus });
     }
+    return res.status(200).json({ message: "User not registered. Invite email sent!", emailStatus });
   }
 
   if (group.members.includes(user._id))
