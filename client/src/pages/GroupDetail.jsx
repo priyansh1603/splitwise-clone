@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import Layout from "../components/Layout";
@@ -97,6 +98,18 @@ export default function GroupDetail() {
     setMemberMsg({ text: "", type: "" });
     try {
       const res = await api.post(`/groups/${id}/members`, { email: memberEmail });
+      if (res.data.message?.includes("not registered")) {
+        await emailjs.send(
+          "service_2a900it",
+          "template_docccls",
+          {
+            to_email: memberEmail,
+            inviter_name: user.name,
+            group_name: group.name,
+          },
+          "fWQROXKp0PZvGo49R"
+        );
+      }
       setMemberEmail("");
       if (res.data.message) {
         setMemberMsg({ text: res.data.message, type: "success" });
